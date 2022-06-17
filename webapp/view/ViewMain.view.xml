@@ -1,0 +1,223 @@
+<mvc:View
+    controllerName="zetanalitics.controller.ViewMain"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+		xmlns:layout="sap.ui.layout"
+	xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.data="sap.viz.ui5.data"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+>
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page id="page" title="{i18n>title}">
+
+					<content >
+						<!-- Selection Screen-->
+						<Panel headerText="{i18n>filters}">
+							<FlexBox height="45px" alignItems="Start" justifyContent="Start">
+								<Input value="{path: '/filters/anno'}"/>
+								<Button text="{i18n>AvvioBtn}" press="onPressFilter" />
+							</FlexBox>
+						</Panel>
+
+						<Panel headerText="{i18n>charts}">
+							<FlexBox height="500px" alignItems="Start" justifyContent="Start">
+								<viz:Popover id="idPopOver"/>
+
+								<viz:VizFrame id="oVizFrameBar" vizType="bar" vizProperties="{/vizPropertiesBar}" uiConfig="{applicationSet: 'fiori'}">
+
+									<viz:dataset>
+
+										<viz.data:FlattenedDataset id="flatDatabar" data="{path: 'analiticos>/AnaliticsSet'}">
+
+										<viz.data:dimensions>
+											<viz.data:DimensionDefinition name="Indicador" value="{analiticos>IndicatorCode}"/>
+											<viz.data:DimensionDefinition name="Year" value="{analiticos>YearIndicator}"/>
+											<viz.data:DimensionDefinition name="StatoFatturazione" value="{analiticos>Gsber}"/>
+										</viz.data:dimensions>
+
+										<viz.data:measures>
+											<viz.data:MeasureDefinition name="Valore" value="{path: 'analiticos>Value',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+											<viz.data:MeasureDefinition name="Contratto" value="{path: 'analiticos>PercentoStato',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+										</viz.data:measures>
+										</viz.data:FlattenedDataset>
+									</viz:dataset>
+
+									<!--Viz Feeds-->
+									<viz:feeds>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Indicador,StatoFatturazione"/>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Year"/>
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Valore,Contratto"/>
+
+									</viz:feeds>
+								</viz:VizFrame>
+
+
+								<viz:VizFrame id="oVizFramePie" vizType="pie" vizProperties="{/vizPropertiesPie}" uiConfig="{applicationSet: 'fiori'}">
+
+									<viz:dataset>
+
+										<viz.data:FlattenedDataset id="flatDatapie" data="{path: 'analiticos>/AnaliticsSet'}">
+
+										<viz.data:dimensions>
+											<viz.data:DimensionDefinition name="StatoNegoziazione" value="{analiticos>Gsber}"/>
+							
+										</viz.data:dimensions>
+
+										<viz.data:measures>
+											<viz.data:MeasureDefinition name="Valore" value="{path: 'analiticos>Value',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+											
+
+										</viz.data:measures>
+										</viz.data:FlattenedDataset>
+									</viz:dataset>
+
+									<!--Viz Feeds-->
+									<viz:feeds>
+										<viz.feeds:FeedItem uid="color" type="Dimension" values="StatoNegoziazione"/>
+										<viz.feeds:FeedItem uid="size" type="Measure" values="Valore"/>
+
+									</viz:feeds>
+								</viz:VizFrame>
+							</FlexBox>
+
+
+						</Panel>
+
+						<layout:FixFlex id="oVizColumn" minFlexSize="250">
+							<layout:flexContent>
+						
+								<viz:VizFrame id="oVizFrameColumn" vizType="column" vizProperties="{/vizPropertiesColumn}" height="100%" width="100%" uiConfig="{applicationSet: 'fiori'}">
+
+									<viz:dataset>
+
+										<viz.data:FlattenedDataset id="flatDataColumn" data="{path: 'analiticos>/AnaliticsSet'}">
+
+										<viz.data:dimensions>
+											<viz.data:DimensionDefinition name="StatoNegoziazione" value="{analiticos>MonthIndicator}"/>
+											<viz.data:DimensionDefinition name="Indicatore" value="{analiticos>IndicatorCode}"/>
+										</viz.data:dimensions>
+
+										<viz.data:measures>
+											<viz.data:MeasureDefinition name="Valore" value="{path: 'analiticos>Value',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+											<viz.data:MeasureDefinition name="Stato" value="{path: 'analiticos>PercentoStato',
+																					type: 'sap.ui.model.odata.type.Decimal'}"
+																			unit="{analiticos>Divisa}" />
+											<viz.data:MeasureDefinition name="Contratto" value="{path: 'analiticos>Importocontratto',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+										</viz.data:measures>
+										</viz.data:FlattenedDataset>
+									</viz:dataset>
+
+									<!--Viz Feeds-->
+									<viz:feeds>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Indicatore"/>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="StatoNegoziazione"/>
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Valore,Stato"/>
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Contratto"/>
+									</viz:feeds>
+								</viz:VizFrame>
+							</layout:flexContent>
+						</layout:FixFlex >
+
+
+
+
+						<layout:FixFlex id="oVizStackedColumn" minFlexSize="250">
+							<layout:flexContent>
+						
+								<viz:VizFrame id="oVizFrameStackedColumn" vizType="stacked_column" vizProperties="{/vizPropertiesStackedColumn}" height="100%" width="100%" uiConfig="{applicationSet: 'fiori'}">
+
+									<viz:dataset>
+
+										<viz.data:FlattenedDataset id="flatDataStackedColumn" data="{path: 'analiticos>/AnaliticsSet'}">
+
+										<viz.data:dimensions>
+											<viz.data:DimensionDefinition name="Indicatore" value="{analiticos>IndicatorCode}"/>
+											<viz.data:DimensionDefinition name="StatoNegoziazione" value="{analiticos>WeekIndicator}"/>
+							
+										</viz.data:dimensions>
+
+										<viz.data:measures>
+											<viz.data:MeasureDefinition name="Valore" value="{path: 'analiticos>Value',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+											<viz.data:MeasureDefinition name="Stato" value="{path: 'analiticos>PercentoStato',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+											
+										</viz.data:measures>
+										</viz.data:FlattenedDataset>
+									</viz:dataset>
+
+									<!--Viz Feeds-->
+									<viz:feeds>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Indicatore"/>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="StatoNegoziazione"/>
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Valore,Stato"/>
+
+									</viz:feeds>
+								</viz:VizFrame>
+							
+
+							</layout:flexContent>
+						</layout:FixFlex >
+
+							<layout:FixFlex id="oVizStackedRadar" minFlexSize="250">
+							<layout:flexContent>
+
+
+							    <viz:VizFrame id="idVizFrameRadar" vizProperties="{/vizPropertiesFrameRadar}" uiConfig="{applicationSet:'fiori'}"
+									height='100%' width="100%" vizType='radar'>
+									<viz:dataset>
+										<viz.data:FlattenedDataset id="flatDataRadar" data="{path: 'analiticos>/AnaliticsSet'}">
+											<viz.data:dimensions>
+												<viz.data:DimensionDefinition name="Societavendite" value="{analiticos>IndicatorCode}"/>
+											</viz.data:dimensions>
+											<viz.data:measures>
+													<viz.data:MeasureDefinition name="Valore" value="{path: 'analiticos>Value',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+													<viz.data:MeasureDefinition name="Stato" value="{path: 'analiticos>PercentoStato',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+													<viz.data:MeasureDefinition name="Contratto" value="{path: 'analiticos>Importocontratto',
+																								type: 'sap.ui.model.odata.type.Decimal'}"
+																						unit="{analiticos>Divisa}" />
+											</viz.data:measures>
+										</viz.data:FlattenedDataset>
+									</viz:dataset>
+
+									<viz:feeds>
+										<viz.feeds:FeedItem  uid="valueAxis" type="Measure"
+											values="Valore" />
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure"
+											values="Stato" />
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure"
+											values="Contratto" />
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension"
+											values="Societavendite" />
+									</viz:feeds>
+								</viz:VizFrame>
+
+
+							</layout:flexContent>
+						</layout:FixFlex >
+
+					</content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>
