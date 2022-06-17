@@ -99,21 +99,22 @@
 
 									<viz:dataset>
 
-										<viz.data:FlattenedDataset id="flatDataColumn" data="{path: 'analiticos>/AnaliticsSet'}">
+										<viz.data:FlattenedDataset id="flatDataColumn" data="{path: 'analiticos>/GraficoPorFecha'}">
 
 										<viz.data:dimensions>
-											<viz.data:DimensionDefinition name="StatoNegoziazione" value="{analiticos>MonthIndicator}"/>
-											<viz.data:DimensionDefinition name="Indicatore" value="{analiticos>IndicatorCode}"/>
+											<viz.data:DimensionDefinition name="Month" value="{analiticos>MonthIndicator}"/>
+											<viz.data:DimensionDefinition name="Year" value="{analiticos>YearIndicator}"/>
+											<viz.data:DimensionDefinition name="Division" value="{analiticos>Gsber}"/>
 										</viz.data:dimensions>
 
 										<viz.data:measures>
-											<viz.data:MeasureDefinition name="Valore" value="{path: 'analiticos>Value',
+											<viz.data:MeasureDefinition name="&lt;5" value="{path: 'analiticos>I005',
 																								type: 'sap.ui.model.odata.type.Decimal'}"
 																						unit="{analiticos>Divisa}" />
-											<viz.data:MeasureDefinition name="Stato" value="{path: 'analiticos>PercentoStato',
+											<viz.data:MeasureDefinition name="&lt;10" value="{path: 'analiticos>I006',
 																					type: 'sap.ui.model.odata.type.Decimal'}"
 																			unit="{analiticos>Divisa}" />
-											<viz.data:MeasureDefinition name="Contratto" value="{path: 'analiticos>Importocontratto',
+											<viz.data:MeasureDefinition name="&gt;10" value="{path: 'analiticos>I007',
 																								type: 'sap.ui.model.odata.type.Decimal'}"
 																						unit="{analiticos>Divisa}" />
 										</viz.data:measures>
@@ -122,10 +123,12 @@
 
 									<!--Viz Feeds-->
 									<viz:feeds>
-										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Indicatore"/>
-										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="StatoNegoziazione"/>
-										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Valore,Stato"/>
-										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Contratto"/>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Year"/>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Month"/>
+										<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Division"/>
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="&lt;5"/>
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="&lt;10"/>
+										<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="&gt;10"/>
 									</viz:feeds>
 								</viz:VizFrame>
 							</layout:flexContent>

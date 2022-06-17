@@ -56,7 +56,7 @@
           "bundleName": "zetanalitics.i18n.i18n"
         }
       },
-      "analiticos": {
+      "analiticosBase": {
         "dataSource": "mainService",
         "preload": true,
         "settings": {}
